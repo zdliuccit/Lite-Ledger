@@ -71,7 +71,33 @@
 ### 验证结果
 
 - `pnpm exec tsc --noEmit`：通过
+
+### 复查结论
+
+- 追加扫描 `src/features/ledger`、`src/theme` 与 `src/app` 后，未再发现中文变量名、中文类型名、中文对象属性访问或中文 JSX prop 名残留。
+- 当前 `ledger` 目录中剩余的中文内容为页面展示文案、导航标题、可访问性文本和设计稿资源路径，不属于 TypeScript 标识符错误范围。
 - `pnpm lint`：通过
+
+## 2026-04-26 ledger pages 命名修复阶段
+
+- 执行者：Codex
+- 任务：修复 `src/features/ledger/pages` 中因变量和接口命名从中文迁移到英文后遗留的页面错误
+
+### 上下文收集
+
+- 对照 `ledger-basic.tsx`、`ledger-lists.tsx`、`ledger-charts.tsx`、`ledger-keypad.tsx`，确认页面组件 props 已统一为英文命名。
+- 对照 `ledger-mock-data.ts` 与 `ledger-theme.ts`，确认 mock data 导出名、数据字段和主题 key 已统一为英文命名。
+- 检查 `home-page.tsx` 与 `bills-page.tsx`，确认它们已经是英文接口写法，可作为同目录参考实现。
+
+### 实施过程
+
+- 将 `assets-page.tsx`、`add-record-page.tsx`、`budget-page.tsx`、`statistics-page.tsx`、`report-page.tsx`、`accounts-page.tsx`、`mine-page.tsx` 的中文旧接口全部替换为英文接口。
+- 同步修复中文 mock data 导入名、中文数据字段、中文主题 key 和中文图表 items 字段。
+- 将上述页面中的局部状态名、类型别名和样式 key 统一改为英文，降低后续继续混用两套命名体系的风险。
+
+### 验证结果
+
+- `pnpm exec tsc --noEmit`：通过
 - `pnpm doctor`：通过
 - `pnpm exec expo start --offline --port 8099`：已进入项目启动流程，可手动中断
 
@@ -86,3 +112,26 @@
 - JavaScript / TypeScript / Expo / Tamagui 基线已完成
 - Android / iOS 命令入口已配置完成
 - 真实原生运行仍需补齐 CocoaPods 与 Android SDK / adb
+
+## 2026-04-26 启动页实现阶段
+
+- 执行者：Codex
+- 任务：基于 `ledger_design/lite_ledger_splash_screen_3x/` 设计稿实现可复用启动页组件
+
+### 上下文收集
+
+- 检查设计素材目录，确认完整启动页、仅图标版和图标源图均已提供。
+- 对照效果图，确认核心元素包括：浅绿到浅青的背景渐变、顶部与底部光晕、四个描边圆、底部波浪线、应用图标、双语标题和底部英文标语。
+- 检查现有依赖后补充 `expo-linear-gradient`，用于还原设计中的渐变和柔光层。
+
+### 实施过程
+
+- 新增 `src/components/splash-screen.tsx`，封装启动页为独立组件。
+- 使用当前应用图标 `src/assets/app/icon/icon.png` 作为页面主视觉图标。
+- 通过 `LinearGradient`、装饰圆环、波浪线段和阴影组合还原设计稿氛围。
+- 重写 `src/app/index.tsx`，让首页直接挂载启动页组件。
+
+### 验证结果
+
+- `pnpm exec tsc --noEmit`：通过
+- `pnpm lint`：通过

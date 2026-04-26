@@ -1,0 +1,61 @@
+{
+  "date": "2026-04-26",
+  "executor": "Codex",
+  "target": "src/features/ledger/pages",
+  "location": {
+    "directory": "src/features/ledger/pages",
+    "files": [
+      "assets-page.tsx",
+      "add-record-page.tsx",
+      "statistics-page.tsx",
+      "budget-page.tsx",
+      "report-page.tsx",
+      "bills-page.tsx",
+      "accounts-page.tsx",
+      "home-page.tsx",
+      "mine-page.tsx"
+    ]
+  },
+  "currentState": {
+    "problem": "多个页面仍使用中文组件 prop、中文 mock data 导出名、中文数据字段和中文 theme key，而相关声明文件已经改成英文命名。",
+    "affectedFiles": [
+      "src/features/ledger/pages/assets-page.tsx",
+      "src/features/ledger/pages/add-record-page.tsx",
+      "src/features/ledger/pages/budget-page.tsx",
+      "src/features/ledger/pages/statistics-page.tsx",
+      "src/features/ledger/pages/report-page.tsx",
+      "src/features/ledger/pages/accounts-page.tsx",
+      "src/features/ledger/pages/mine-page.tsx"
+    ],
+    "referenceFiles": [
+      "src/features/ledger/components/ledger-basic.tsx",
+      "src/features/ledger/components/ledger-lists.tsx",
+      "src/features/ledger/components/ledger-charts.tsx",
+      "src/features/ledger/components/ledger-keypad.tsx",
+      "src/features/ledger/ledger-mock-data.ts",
+      "src/theme/ledger-theme.ts"
+    ]
+  },
+  "techStack": {
+    "framework": "Expo Router + React Native",
+    "language": "TypeScript",
+    "styling": "React Native StyleSheet"
+  },
+  "testing": {
+    "availableScripts": [
+      "pnpm lint"
+    ],
+    "chosenValidation": "pnpm exec tsc --noEmit"
+  },
+  "observationReport": {
+    "similarCases": [
+      "src/features/ledger/pages/home-page.tsx",
+      "src/features/ledger/pages/bills-page.tsx"
+    ],
+    "abnormalities": [
+      "同一目录内同时存在英文接口页面和中文旧接口页面",
+      "中文残留不仅在 JSX props，也在 mock data 导入、对象字段、theme key 和局部样式 key"
+    ],
+    "recommendation": "以声明文件为准逐页替换为英文接口，并在页面内同步清理局部中文代码标识，避免后续继续混用。"
+  }
+}

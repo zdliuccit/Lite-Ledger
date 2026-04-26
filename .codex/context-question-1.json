@@ -1,0 +1,28 @@
+{
+  "date": "2026-04-26",
+  "executor": "Codex",
+  "question": "页面目录中哪些中文标识是展示文案，哪些是必须改为英文接口的旧代码引用？",
+  "known": [
+    "ledger-basic、ledger-lists、ledger-charts、ledger-keypad 的 props 已全部是英文命名",
+    "ledger-mock-data 的导出名和数据字段已全部是英文命名",
+    "ledger-theme 的颜色和布局 key 已全部是英文命名"
+  ],
+  "unknown": [
+    "pages 目录内哪些中文出现仅是 UI 文案，哪些是会导致类型错误的代码标识"
+  ],
+  "priority": "high",
+  "answer": {
+    "mustChange": [
+      "中文 import 名",
+      "中文组件 prop 名",
+      "中文对象字段名",
+      "中文 theme key",
+      "继续影响阅读和维护的局部中文状态/样式 key"
+    ],
+    "canKeep": [
+      "页面展示文案",
+      "图表标签文本",
+      "按钮文字和标题内容"
+    ]
+  }
+}
