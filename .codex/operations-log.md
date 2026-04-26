@@ -76,6 +76,56 @@
 
 - 追加扫描 `src/features/ledger`、`src/theme` 与 `src/app` 后，未再发现中文变量名、中文类型名、中文对象属性访问或中文 JSX prop 名残留。
 - 当前 `ledger` 目录中剩余的中文内容为页面展示文案、导航标题、可访问性文本和设计稿资源路径，不属于 TypeScript 标识符错误范围。
+
+## 2026-04-27 design-assets 图片迁移阶段
+
+- 执行者：Codex
+- 任务：将 `src/features/ledger/design-assets.ts` 实际使用的图片资源复制到 `src/assets`，切换引用，并移除无用项
+
+### 上下文收集
+
+- 检查 `design-assets.ts`，确认其当前包含三组导出：`screenDesignImages`、`tabBarIcons`、`featureIcons`。
+- 检查代码引用，确认 `screenDesignImages` 当前没有任何使用方，可视为无用导出。
+- 检查 `featureIcons` 各 key 的实际引用，确认 `travel` 当前无使用方，可视为无用项。
+
+### 实施过程
+
+- 新建 `src/assets/ledger/icons/tab` 与 `src/assets/ledger/icons/feature`。
+- 将 `design-assets.ts` 实际仍在使用的图标资源复制到上述目录。
+- 更新 `design-assets.ts`，使 `tabBarIcons` 与 `featureIcons` 全部改从 `src/assets/ledger` 读取。
+- 删除无使用方的 `screenDesignImages` 导出与 `featureIcons.travel` 项。
+- 更新 `src/assets/README.md`，补充 `ledger/` 目录说明。
+
+### 验证结果
+
+- `pnpm exec tsc --noEmit`：通过
+- 搜索确认 `design-assets.ts` 不再残留 `ledger_design` 图片路径
+- 搜索确认 `screenDesignImages` 与 `featureIcons.travel` 无残留引用
+
+## 2026-04-27 页面图片迁移阶段
+
+- 执行者：Codex
+- 任务：将页面运行时使用的图片统一收拢到 `src/assets`，并按账本页面用途拆分目录
+
+### 上下文收集
+
+- 检查 `src/components/splash-screen.tsx`，确认启动页图标已位于 `src/assets/app/icon/icon.png`。
+- 检查 `src/features/ledger/design-assets.ts`，确认账本页面图片入口集中在该文件，包含 tab 图标、功能图标和页面设计图。
+- 额外核对发现：`design-assets.ts` 中多张 `icon_*_96.png` 在旧目录中并不存在，但对应 `icons_svg_no_text/*.svg` 源文件存在。
+
+### 实施过程
+
+- 新建 `src/assets/ledger/icons/tab`、`src/assets/ledger/icons/feature`、`src/assets/ledger/screens/design`。
+- 将 design-assets 使用的页面设计图和现有 PNG 图标复制到上述目录。
+- 使用系统 `qlmanage` 将缺失的 SVG 图标批量转换为 `96.png`，补齐账本页面实际依赖的图标资源。
+- 更新 `src/features/ledger/design-assets.ts`，使页面模块全部改从 `src/assets/ledger` 读取静态图片。
+- 更新 `src/assets/README.md`，补充 `ledger/` 目录说明。
+
+### 验证结果
+
+- `pnpm exec tsc --noEmit`：通过
+- 检查 `src/features/ledger/design-assets.ts` 的全部 `require(...)` 路径：对应目标文件均存在
+- 检查页面模块图片引用：不再残留 `ledger_design` 下的图片路径
 - `pnpm lint`：通过
 
 ## 2026-04-26 ledger pages 命名修复阶段
